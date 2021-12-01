@@ -1,7 +1,8 @@
 package com.example.stellarlumenywallet.fragments.wallet
 
+import android.content.Context
 import android.os.Bundle
-import android.transition.Visibility
+import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -11,11 +12,10 @@ import com.example.stellarlumenywallet.adapters.balances.BalancesAdapter
 import com.example.stellarlumenywallet.databinding.FragmentWalletBinding
 import com.example.stellarlumenywallet.db.WalletRoomDatabase
 import com.example.stellarlumenywallet.db.repositories.AccountRepository
-import com.example.stellarlumenywallet.db.repositories.ActiveAccountRepository
 import com.example.stellarlumenywallet.db.repositories.TransactionRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class WalletFragment: Fragment() {
@@ -28,8 +28,7 @@ class WalletFragment: Fragment() {
         val database by lazy { WalletRoomDatabase.getDatabase(requireContext()) }
         val transactionRepository by lazy { TransactionRepository(database.transactionDao()) }
         val accountRepository by lazy { AccountRepository(database.accountDao()) }
-        val activeAccountRepository by lazy { ActiveAccountRepository(database.activeAccount()) }
-        val viewModelFactory = WalletViewModelFactory(transactionRepository, accountRepository, activeAccountRepository)
+        val viewModelFactory = WalletViewModelFactory(transactionRepository, accountRepository)
         viewModel = ViewModelProvider(this, viewModelFactory)[WalletViewModel::class.java]
 
         val adapter = BalancesAdapter()
@@ -61,8 +60,12 @@ class WalletFragment: Fragment() {
             adapter.notifyDataSetChanged()
         }
 
-        // binding.swipeRefreshLayout.setOnRefreshListener { runBlocking(Dispatchers.IO) { launch { } } }
-        // withContext(Dispatchers.Main) { binding.swipeRefreshLayout.isRefreshing = false }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            GlobalScope.launch(Dispatchers.IO) {
+                val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+                val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "")
+            }
+        }
 
         return binding.root
     }

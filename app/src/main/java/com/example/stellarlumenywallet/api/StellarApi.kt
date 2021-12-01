@@ -6,6 +6,7 @@ import org.stellar.sdk.*
 import org.stellar.sdk.responses.SubmitTransactionResponse
 import org.stellar.sdk.responses.operations.CreateAccountOperationResponse
 import org.stellar.sdk.responses.operations.PaymentOperationResponse
+import shadow.okhttp3.OkHttpClient
 import java.io.InputStream
 import java.net.URL
 
@@ -13,7 +14,13 @@ object StellarApi {
     private val serverUrl = "https://horizon-testnet.stellar.org"
     private val friendBotUrl = "https://friendbot.stellar.org"
 
-    private val server = Server(serverUrl)
+    private val server = createServer()
+
+    private fun createServer(): Server {
+        val server = Server(serverUrl)
+        server.httpClient = OkHttpClient()
+        return server
+    }
 
     fun createKeyPair(): KeyPair = KeyPair.random()
 
@@ -38,7 +45,7 @@ object StellarApi {
         return balances
     }
 
-    suspend fun getTransactions(accountId: String): List<DbTransaction> {
+    fun getTransactions(accountId: String): List<DbTransaction> {
         val transactions = mutableListOf<DbTransaction>()
 
         val operationsFromServer = server.operations().forAccount(accountId).execute()
@@ -72,7 +79,23 @@ object StellarApi {
         return server.submitTransaction(transaction)
     }
 
-    fun getPublicKeyFromSecretSeed(secretSeed: String): String = String(KeyPair.fromSecretSeed(secretSeed).publicKey)
+    fun secretSeedToString(secretSeed: CharArray): String {
+        val sb = StringBuilder()
+        secretSeed.forEach { sb.append(it) }
+        return sb.toString()
+    }
 
-    fun getAccountIdFromSecretSeed(secretSeed: String): String = KeyPair.fromSecretSeed(secretSeed).accountId
+    fun getPublicKeyFromSecretSeed(secretSeed: String): String {
+        val publicKey = KeyPair.fromSecretSeed(secretSeed).publicKey
+        return android.util.Base64.encodeToString(publicKey, android.util.Base64.NO_PADDING)
+    }
+
+    fun getAccountIdFromSecretSeed(secretSeed: String): String {
+        val accountId = KeyPair.fromSecretSeed(secretSeed).accountId
+        val sb = StringBuilder()
+        accountId.forEach { sb.append(it) }
+        return sb.toString()
+    }
+
+    fun getKeyPairFromSecretSeed(secretSeed: String): KeyPair = KeyPair.fromSecretSeed(secretSeed)
 }

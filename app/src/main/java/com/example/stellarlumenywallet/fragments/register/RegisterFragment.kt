@@ -1,6 +1,7 @@
 package com.example.stellarlumenywallet.fragments.register
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +16,14 @@ import com.example.stellarlumenywallet.db.WalletRoomDatabase
 import com.example.stellarlumenywallet.db.entities.Account
 import com.example.stellarlumenywallet.db.repositories.AccountRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.stellar.sdk.Server
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 class RegisterFragment: Fragment() {
     private lateinit var binding: FragmentRegisterBinding
@@ -31,9 +38,13 @@ class RegisterFragment: Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[RegisterViewModel::class.java]
 
         val keyPair = StellarApi.createKeyPair()
-        val accountId = keyPair.accountId
-        val publicKey = String(keyPair.publicKey)
-        val secretSeed = String(keyPair.secretSeed)
+        val secretSeed = StellarApi.secretSeedToString(keyPair.secretSeed)
+        val publicKey = StellarApi.getPublicKeyFromSecretSeed(secretSeed)
+        val accountId = StellarApi.getAccountIdFromSecretSeed(secretSeed)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            StellarApi.openAccount(keyPair)
+        }
 
         binding.accountIdLayout.editText?.setText(accountId)
         binding.publicKeyLayout.editText?.setText(publicKey)
