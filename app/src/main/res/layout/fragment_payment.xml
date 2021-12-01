@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         style="@style/fragment_default"
         android:layout_height="match_parent">
@@ -69,12 +69,12 @@
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" >
-            <AutoCompleteTextView
-                    android:id="@+id/auto_complete_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:inputType="none"
-                    android:hint="@string/recipient" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/auto_complete_view"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="@string/recipient" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -85,7 +85,7 @@
                 android:layout_marginTop="12dp"
                 android:autofillHints="Insert new name."
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recipient_input_layout">
             <com.google.android.material.textfield.TextInputEditText
