@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="textInput">
+        <item name="android:layout_width">274dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:ems">10</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/blue</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+    <style name="button">
+        <item name="android:layout_width">266dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_margin">15dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:background">@drawable/btn_border</item>
+        <item name="android:fontFamily">@font/roboto_condensed_bold</item>
+    </style>
+
+    <style name="button1">
+        <item name="android:layout_width">266dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_margin">15dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:background">@drawable/btn_border1</item>
+        <item name="android:fontFamily">@font/roboto_condensed_bold</item>
+    </style>
+
+    <style name="fragment_default">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/dark_blue</item>
+    </style>
+
+    <style name="title">
+        <item name="android:layout_width">266dp</item>
+        <item name="android:layout_height">21dp</item>
+        <item name="android:fontFamily">@font/roboto_condensed_bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>

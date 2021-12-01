@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/walletFragment"
-          android:title="Wallet"/>
+    <item
+        android:id="@+id/walletFragment"
+        android:icon="@drawable/ic_wallet_svgrepo_com"
+        android:title="@string/wallet"/>
 
-    <item android:id="@+id/paymentFragment"
-          android:title="Payment"/>
+    <item
+        android:id="@+id/paymentFragment"
+        android:icon="@drawable/ic_send_svgrepo_com"
+        android:title="@string/paymentTitle"/>
 
-    <item android:id="@+id/contactsFragment"
-          android:title="Contacts"/>
+    <item
+        android:id="@+id/contactsFragment"
+        android:icon="@drawable/ic_friends_talking_svgrepo_com"
+        android:title="@string/contactsTitle"/>
 
-    <item android:id="@+id/accountManagementFragment"
-          android:title="Account Management" />
-
+    <item
+        android:id="@+id/accountManagementFragment"
+        android:icon="@drawable/ic_settings_svgrepo"
+        android:title="@string/settingsTitle" />
 </menu>

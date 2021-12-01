@@ -2,4 +2,46 @@
     <string name="app_name">Stellar Lumeny Wallet</string>
 
     <string name="active_account_id" translatable="false">activeAccountId</string>
+    <string name="fragment_wallet">WALLET</string>
+    <string name="fragment_send">SEND</string>
+    <string name="fragment_contacts">CONTACTS</string>
+    <string name="fragment_settings">SETTINGS</string>
+
+    <string name="title_contact">Contact:</string>
+    <string name="stellar_wallet">STELLAR WALLET</string>
+    <string name="stellar_logo">Stellar logo</string>
+    <string name="login">LOGIN</string>
+    <string name="logout">LOG OUT</string>
+    <string name="insert_code">Insert code</string>
+    <string name="public_key">Public key</string>
+    <string name="alias">Alias</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="new_payment">NEW PAYMENT</string>
+    <string name="recipient">Recipient</string>
+    <string name="amount">Amount</string>
+    <string name="note">Note</string>
+    <string name="register">Register</string>
+    <string name="don_t_you_have_a_wallet">DON\'T YOU HAVE A WALLET?</string>
+    <string name="version">v0.0.1</string>
+    <string name="your_private_key">YOUR PRIVATE KEY</string>
+    <string name="your_public_key">YOUR PUBLIC KEY</string>
+    <string name="take_me_to_the_app">TAKE ME TO THE APP</string>
+    <string name="balance">BALANCE</string>
+    <string name="latest_transactions">LATEST TRANSACTIONS</string>
+    <string name="contacts">CONTACTS</string>
+    <string name="new_contact">NEW CONTACT</string>
+    <string name="fragment_login">LOGIN</string>
+    <string name="fragment_register_info">REGISTERINFO</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="wallet">Wallet</string>
+    <string name="contactsTitle">Contacts</string>
+    <string name="paymentTitle">Payment</string>
+    <string name="settingsTitle">Settings</string>
+    <string name="name">Name</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="add_existing_account">Add existing account</string>
+    <string name="save_account">Save account</string>
+    <string name="secret_seed">Secret seed</string>
+    <string name="choose_account">CHOOSE ACCOUNT</string>
 </resources>
