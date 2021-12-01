@@ -15,7 +15,7 @@
         <item name="android:layout_width">266dp</item>
         <item name="android:layout_height">45dp</item>
         <item name="android:layout_margin">15dp</item>
-        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginTop">20dp</item>
         <item name="android:background">@drawable/btn_border</item>
         <item name="android:fontFamily">@font/roboto_condensed_bold</item>
     </style>
