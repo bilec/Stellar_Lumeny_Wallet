@@ -38,9 +38,9 @@ class RegisterFragment: Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[RegisterViewModel::class.java]
 
         val keyPair = StellarApi.createKeyPair()
-        val secretSeed = StellarApi.secretSeedToString(keyPair.secretSeed)
-        val publicKey = StellarApi.getPublicKeyFromSecretSeed(secretSeed)
-        val accountId = StellarApi.getAccountIdFromSecretSeed(secretSeed)
+        val secretSeed = keyPair.secretSeed.toString()
+        val publicKey = keyPair.publicKey.toString()
+        val accountId = keyPair.accountId.toString()
 
         GlobalScope.launch(Dispatchers.IO) {
             StellarApi.openAccount(keyPair)

@@ -3,6 +3,7 @@ package com.example.stellarlumenywallet.api
 import com.example.stellarlumenywallet.db.entities.Transaction as DbTransaction
 import com.example.stellarlumenywallet.db.entities.Balance
 import org.stellar.sdk.*
+import org.stellar.sdk.responses.AccountResponse
 import org.stellar.sdk.responses.SubmitTransactionResponse
 import org.stellar.sdk.responses.operations.CreateAccountOperationResponse
 import org.stellar.sdk.responses.operations.PaymentOperationResponse
@@ -22,6 +23,11 @@ object StellarApi {
         return server
     }
 
+    fun getAccount(accoundId: String): AccountResponse {
+        val account = server.accounts().account(accoundId)
+        return account
+    }
+
     fun createKeyPair(): KeyPair = KeyPair.random()
 
     suspend fun openAccount(keyPair: KeyPair) {
@@ -29,7 +35,7 @@ object StellarApi {
     }
 
     suspend fun getBalances(accountId: String): List<Balance> {
-        val account = server.accounts().account(accountId)
+        val account = getAccount(accountId)
         val balances = mutableListOf<Balance>()
 
         account.balances.forEach {
@@ -82,18 +88,6 @@ object StellarApi {
     fun secretSeedToString(secretSeed: CharArray): String {
         val sb = StringBuilder()
         secretSeed.forEach { sb.append(it) }
-        return sb.toString()
-    }
-
-    fun getPublicKeyFromSecretSeed(secretSeed: String): String {
-        val publicKey = KeyPair.fromSecretSeed(secretSeed).publicKey
-        return android.util.Base64.encodeToString(publicKey, android.util.Base64.NO_PADDING)
-    }
-
-    fun getAccountIdFromSecretSeed(secretSeed: String): String {
-        val accountId = KeyPair.fromSecretSeed(secretSeed).accountId
-        val sb = StringBuilder()
-        accountId.forEach { sb.append(it) }
         return sb.toString()
     }
 
