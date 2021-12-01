@@ -37,5 +37,8 @@
     <string name="paymentTitle">Payment</string>
     <string name="settingsTitle">Settings</string>
     <string name="name">Name</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="add_existing_account">Add existing account</string>
     <string name="save_account">Save account</string>
+    <string name="secret_seed">Secret seed</string>
 </resources>

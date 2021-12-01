@@ -55,7 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            app:backgroundTint="#D5D8E4"
+            app:backgroundTint="#FDFDFD"
+            android:src="@drawable/ic_plus_solid"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
