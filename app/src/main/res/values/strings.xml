@@ -32,7 +32,6 @@
     <string name="new_contact">NEW CONTACT</string>
     <string name="fragment_login">LOGIN</string>
     <string name="fragment_register_info">REGISTERINFO</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="wallet">Wallet</string>
     <string name="contactsTitle">Contacts</string>
@@ -44,5 +43,5 @@
     <string name="save_account">Save account</string>
     <string name="secret_seed">Secret seed</string>
     <string name="choose_account">CHOOSE ACCOUNT</string>
->>>>>>>>> Temporary merge branch 2
+    <string name="transactions">TRANSACTIONS</string>
 </resources>

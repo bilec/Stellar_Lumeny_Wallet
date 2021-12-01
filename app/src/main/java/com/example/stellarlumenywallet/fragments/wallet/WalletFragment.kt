@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.stellarlumenywallet.R
 import com.example.stellarlumenywallet.adapters.balances.BalancesAdapter
+import com.example.stellarlumenywallet.api.StellarApi
 import com.example.stellarlumenywallet.databinding.FragmentWalletBinding
 import com.example.stellarlumenywallet.db.WalletRoomDatabase
 import com.example.stellarlumenywallet.db.repositories.AccountRepository
+import com.example.stellarlumenywallet.db.repositories.BalanceRepository
 import com.example.stellarlumenywallet.db.repositories.TransactionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,7 +30,8 @@ class WalletFragment: Fragment() {
         val database by lazy { WalletRoomDatabase.getDatabase(requireContext()) }
         val transactionRepository by lazy { TransactionRepository(database.transactionDao()) }
         val accountRepository by lazy { AccountRepository(database.accountDao()) }
-        val viewModelFactory = WalletViewModelFactory(transactionRepository, accountRepository)
+        val balanceRepository by lazy { BalanceRepository(database.balanceDao()) }
+        val viewModelFactory = WalletViewModelFactory(transactionRepository, accountRepository, balanceRepository)
         viewModel = ViewModelProvider(this, viewModelFactory)[WalletViewModel::class.java]
 
         val adapter = BalancesAdapter()
@@ -56,14 +59,37 @@ class WalletFragment: Fragment() {
         }
 
         viewModel.allAccountsWithBalances.observe(this) {
-            adapter.balances
-            adapter.notifyDataSetChanged()
+            val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+            val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
+
+            GlobalScope.launch(Dispatchers.IO) {
+                val balances = viewModel.allAccountsWithBalances.value?.first { it.account.accountId == activeAccountId }?.balances
+                if (balances != null) {
+                    withContext(Dispatchers.Main) {
+                        adapter.balances = balances
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            }
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             GlobalScope.launch(Dispatchers.IO) {
                 val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
-                val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "")
+                val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
+
+                val balances = StellarApi.getBalances("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
+                val transactions = StellarApi.getTransactions("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
+
+                viewModel.deleteBalances()
+                viewModel.deleteTransaction()
+
+                viewModel.insertBalances(balances)
+                viewModel.insertTransactions(transactions)
+
+                withContext(Dispatchers.Main) {
+                    binding.swipeRefreshLayout.isRefreshing = false
+                }
             }
         }
 
