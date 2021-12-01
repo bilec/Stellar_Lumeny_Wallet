@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/navigation" app:startDestination="@id/walletFragment">
+
+    <fragment android:id="@+id/walletFragment"
+              android:name="com.example.stellarlumenywallet.fragments.wallet.WalletFragment"
+              android:label="WalletFragment"
+    tools:layout="@layout/fragment_wallet"/>
+
+    <fragment android:id="@+id/paymentFragment"
+              android:name="com.example.stellarlumenywallet.fragments.payment.PaymentFragment"
+              android:label="PaymentFragment"
+              tools:layout="@layout/fragment_payment"/>
+
+    <fragment android:id="@+id/contactsFragment"
+              android:name="com.example.stellarlumenywallet.fragments.contacts.ContactsFragment"
+              android:label="ContactsFragment"
+              tools:layout="@layout/fragment_contacts">
+        <action android:id="@+id/action_contactsFragment_to_newContactFragment"
+                app:destination="@id/newContactFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/newContactFragment"
+              android:name="com.example.stellarlumenywallet.fragments.newcontact.NewContactFragment"
+              android:label="NewContactFragment"
+        tools:layout="@layout/fragment_new_contact">
+        <action android:id="@+id/action_newContactFragment_to_contactsFragment" app:destination="@id/contactsFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/accountManagementFragment"
+              android:name="com.example.stellarlumenywallet.fragments.accountmanagement.AccountManagementFragment"
+              android:label="AccountManagementFragment"
+    tools:layout="@layout/fragment_account_management">
+        <action android:id="@+id/action_accountManagementFragment_to_registerFragment"
+                app:destination="@id/registerFragment"/>
+        <action android:id="@+id/action_accountManagementFragment_to_addExistingAccountFragment"
+                app:destination="@id/addExistingAccountFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/registerFragment"
+              android:name="com.example.stellarlumenywallet.fragments.register.RegisterFragment"
+              android:label="RegisterFragment"
+              tools:layout="@layout/fragment_register">
+        <action android:id="@+id/action_registerFragment_to_accountManagementFragment"
+                app:destination="@id/accountManagementFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/addExistingAccountFragment"
+              android:name="com.example.stellarlumenywallet.fragments.addexistingaccount.AddExistingAccountFragment"
+              android:label="AddExistingAccountFragment"
+    tools:layout="@layout/fragment_add_existing_account">
+        <action android:id="@+id/action_addExistingAccountFragment_to_accountManagementFragment"
+                app:destination="@id/accountManagementFragment"/>
+    </fragment>
+
+</navigation>

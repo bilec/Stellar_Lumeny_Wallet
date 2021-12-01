@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "884135582913",
+    "project_id": "mobv-zadanie-12f2a",
+    "storage_bucket": "mobv-zadanie-12f2a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884135582913:android:38dbb972f1b71a46dd0840",
+        "android_client_info": {
+          "package_name": "com.example.stellarlumenywallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884135582913-urqme1hmhjksrbh8di86aoqifojmct1m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.stellarlumenywallet",
+            "certificate_hash": "529fbeb62798f87af5a017804a971bf29d1cc8d6"
+          }
+        },
+        {
+          "client_id": "884135582913-7gb2m34rh18dedubg5hrfih4l2ff1tf7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzPizyiKQZg4vZKNDELXfKnjdWsu950hI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884135582913-7gb2m34rh18dedubg5hrfih4l2ff1tf7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
