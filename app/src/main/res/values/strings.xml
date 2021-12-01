@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Stellar Lumeny Wallet</string>
+
+    <string name="active_account_id" translatable="false">activeAccountId</string>
 </resources>

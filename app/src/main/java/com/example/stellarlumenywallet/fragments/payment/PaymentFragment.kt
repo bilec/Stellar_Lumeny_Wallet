@@ -9,13 +9,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.stellarlumenywallet.R
-import com.example.stellarlumenywallet.api.StellarApi
 import com.example.stellarlumenywallet.databinding.FragmentPaymentBinding
 import com.example.stellarlumenywallet.db.WalletRoomDatabase
 import com.example.stellarlumenywallet.db.repositories.AccountRepository
-import com.example.stellarlumenywallet.db.repositories.ActiveAccountRepository
 import com.example.stellarlumenywallet.db.repositories.ContactRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -29,26 +28,24 @@ class PaymentFragment: Fragment() {
         val database by lazy { WalletRoomDatabase.getDatabase(requireContext()) }
         val contactRepository by lazy { ContactRepository(database.contactDao()) }
         val accountRepository by lazy { AccountRepository(database.accountDao()) }
-        val activeAccountRepository by lazy { ActiveAccountRepository(database.activeAccount()) }
-        val viewModelFactory = PaymentViewModelFactory(contactRepository, accountRepository, activeAccountRepository)
+        val viewModelFactory = PaymentViewModelFactory(contactRepository, accountRepository)
         viewModel = ViewModelProvider(this, viewModelFactory)[PaymentViewModel::class.java]
 
         val adapter = ArrayAdapter(requireContext(), R.layout.item_account, emptyList<String>())
         binding.autoCompleteView.setAdapter(adapter)
 
+        binding.autoCompleteView.setOnItemClickListener { adapterView, view, i, l ->
+            GlobalScope.launch(Dispatchers.IO) {
+                val contact = viewModel.contacts.value?.get(i)
+                if (contact != null) {
+                    viewModel.selectedContactAccountId = contact.accountId
+                }
+            }
+        }
+
         binding.buttonConfirm.setOnClickListener {
             val amount = binding.amountInputLayout.editText?.text.toString()
             val note = binding.noteInputLayout.editText?.text.toString()
-
-            // StellarApi.send()
-//            viewModel.accountsWithBalances.observe(this) {
-//                it.first().balances.forEach { it.assetType }
-//            }
-            runBlocking(Dispatchers.IO) {
-                launch {
-                    viewModel
-                }
-            }
 
             binding.amountInputLayout.editText?.setText("")
             binding.noteInputLayout.editText?.setText("")
