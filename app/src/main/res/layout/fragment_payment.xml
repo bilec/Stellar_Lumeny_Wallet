@@ -61,7 +61,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/recipient_input_layout"
-            style="@style/textInput" style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            style="@style/textInput"
             android:layout_height="48dp"
             android:layout_marginTop="12dp"
             android:autofillHints="Insert public key."
