@@ -44,5 +44,5 @@
     <string name="save_account">Save account</string>
     <string name="secret_seed">Secret seed</string>
     <string name="choose_account">CHOOSE ACCOUNT</string>
-    <string name="public_key">Public key</string>
+>>>>>>>>> Temporary merge branch 2
 </resources>
