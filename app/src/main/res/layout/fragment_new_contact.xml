@@ -100,8 +100,6 @@
                 android:hint="Account id" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-
         <Button
             android:id="@+id/button_save"
             style="@style/button"
