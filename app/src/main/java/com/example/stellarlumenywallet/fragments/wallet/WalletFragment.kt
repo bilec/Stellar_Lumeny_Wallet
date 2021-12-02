@@ -28,53 +28,49 @@ class WalletFragment: Fragment() {
         val transactionRepository by lazy { TransactionRepository(database.transactionDao()) }
         val accountRepository by lazy { AccountRepository(database.accountDao()) }
         val viewModelFactory = WalletViewModelFactory(transactionRepository, accountRepository)
-        val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
+        viewModel = ViewModelProvider(this, viewModelFactory)[WalletViewModel::class.java]
 
-        if (activeAccountId != "") {
-            viewModel = ViewModelProvider(this, viewModelFactory)[WalletViewModel::class.java]
-            binding.balance.text = StellarApi.getBalance(activeAccountId).balance
+        viewModel.allTransactions.observe(this) {
+            val last = it.takeLast(5)
 
-            viewModel.allTransactions.observe(this) {
-                val newTransactions = it.takeLast(3)
-                when (newTransactions.size) {
-                    1 -> {
-                        binding.firstTransaction.text = newTransactions[0].toString()
-                        binding.secondTransaction.visibility = View.GONE
-                        binding.thirdTransaction.visibility = View.GONE
-                    }
-                    2 -> {
-                        binding.firstTransaction.text = newTransactions[0].toString()
-                        binding.secondTransaction.text = newTransactions[1].toString()
-                        binding.thirdTransaction.visibility = View.GONE
-                    }
-                    3 -> {
-                        binding.firstTransaction.text = newTransactions[0].toString()
-                        binding.secondTransaction.text = newTransactions[1].toString()
-                        binding.thirdTransaction.text = newTransactions[2].toString()
-                    }
-                }
+            if (last.size > 0) binding.firstTransaction.text = last[0].toString()
+            if (last.size > 1) binding.secondTransaction.text = last[1].toString()
+            if (last.size > 2) binding.thirdTransaction.text = last[2].toString()
+            if (last.size > 3) binding.fourthTransaction.text = last[3].toString()
+            if (last.size > 4) binding.fifthTransaction.text = last[4].toString()
+        }
+
+        viewModel.allAccounts.observe(this) {
+            val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+            val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
+
+            if (activeAccountId != "") {
+                binding.balance.text = it.first { it.accountId == activeAccountId }.balance
             }
+        }
 
-            binding.swipeRefreshLayout.setOnRefreshListener {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+            val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
+
+            if (activeAccountId != "") {
                 GlobalScope.launch(Dispatchers.IO) {
-                    binding.balance.text = StellarApi.getBalance(activeAccountId).balance
-
-                    if (activeAccountId == "") {
-                        withContext(Dispatchers.Main) { binding.swipeRefreshLayout.isRefreshing = false }
-                        return@launch
-                    }
-
-                    val transactions = StellarApi.getTransactions("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
+                    val transactions = StellarApi.getTransactions(activeAccountId)
+                    val balance = StellarApi.getBalance(activeAccountId)
 
                     viewModel.deleteTransaction()
+                    val account = viewModel.allAccounts.value?.first { it.accountId == activeAccountId }?.copy(balance = balance)
 
+                    viewModel.updateAccount(account!!)
                     viewModel.insertTransactions(transactions)
 
                     withContext(Dispatchers.Main) {
                         binding.swipeRefreshLayout.isRefreshing = false
                     }
                 }
+            }
+            else {
+                binding.swipeRefreshLayout.isRefreshing = false
             }
         }
 

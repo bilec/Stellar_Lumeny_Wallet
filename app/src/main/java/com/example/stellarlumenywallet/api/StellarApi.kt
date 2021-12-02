@@ -34,7 +34,7 @@ object StellarApi {
         val response: InputStream = URL("$friendBotUrl/?addr=${keyPair.accountId}").openStream()
     }
 
-    fun getTransactions(accountId: String): List<DbTransaction> {
+    suspend fun getTransactions(accountId: String): List<DbTransaction> {
         val transactions = mutableListOf<DbTransaction>()
 
         val operationsFromServer = server.operations().forAccount(accountId).execute()
@@ -54,10 +54,10 @@ object StellarApi {
         return transactions
     }
 
-    fun getBalance(accountId: String): AccountResponse.Balance{
+    suspend fun getBalance(accountId: String): String{
         getAccount(accountId).getBalances().forEach {
             if (it.assetType == AssetTypeNative().toString()){
-                return it
+                return it.balance
             }
         }
         throw Exception("AssetTypeNative not exist.")

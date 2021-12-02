@@ -101,13 +101,17 @@
                     android:id="@+id/first_transaction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
                       app:layout_constraintStart_toStartOf="parent"
-                      app:layout_constraintTop_toBottomOf="@id/recycler_view" />
+                      app:layout_constraintTop_toBottomOf="@id/textView11" />
 
             <TextView
                     android:id="@+id/second_transaction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/first_transaction" />
 
@@ -115,8 +119,28 @@
                     android:id="@+id/third_transaction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/second_transaction" />
+
+            <TextView
+                    android:id="@+id/fourth_transaction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/third_transaction" />
+
+            <TextView
+                    android:id="@+id/fifth_transaction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/fourth_transaction" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
