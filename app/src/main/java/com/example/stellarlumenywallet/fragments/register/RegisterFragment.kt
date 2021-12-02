@@ -1,6 +1,7 @@
 package com.example.stellarlumenywallet.fragments.register
 
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import android.util.Base64
 import org.stellar.sdk.Server
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -40,7 +40,7 @@ class RegisterFragment: Fragment() {
 
         val keyPair = StellarApi.createKeyPair()
         val secretSeed = StellarApi.secretSeedToString(keyPair.secretSeed)
-        val publicKey = Base64.encodeToString(keyPair.publicKey, 0)
+        val publicKey = Base64.encodeToString(keyPair.publicKey, Base64.NO_WRAP)
         val accountId = keyPair.accountId
 
         GlobalScope.launch(Dispatchers.IO) {

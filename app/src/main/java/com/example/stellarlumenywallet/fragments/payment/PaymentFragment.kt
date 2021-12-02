@@ -43,17 +43,22 @@ class PaymentFragment: Fragment() {
         }
 
         binding.buttonConfirm.setOnClickListener {
+            val recipient = viewModel.selectedContactAccountId
+            val amount = binding.amountInputLayout.editText?.text.toString()
+            val note = binding.noteInputLayout.editText?.text.toString()
+
             GlobalScope.launch(Dispatchers.IO) {
-                val recipient = "binding from dropdown"
-                val amount = binding.amountInputLayout.editText?.text.toString()
-                val note = binding.noteInputLayout.editText?.text.toString()
                 val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
                 val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
+                val activeSecretSeed = sharedPreferences.getString(getString(R.string.active_secret_seed), "") ?: ""
+                if (activeAccountId != "" && activeSecretSeed != "") {
+                    val response = StellarApi.send(activeSecretSeed, activeAccountId, recipient, amount, note)
+                }
 
-                binding.amountInputLayout.editText?.setText("")
-                binding.noteInputLayout.editText?.setText("")
-
-                val response = StellarApi.send(activeAccountId, recipient, amount, note)
+                withContext(Dispatchers.Main) {
+                    binding.amountInputLayout.editText?.setText("")
+                    binding.noteInputLayout.editText?.setText("")
+                }
             }
         }
 

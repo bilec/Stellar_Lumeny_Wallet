@@ -44,6 +44,7 @@ class AccountManagementFragment: Fragment() {
                     val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
                     with(sharedPreferences.edit()) {
                         putString(getString(R.string.active_account_id), account.accountId)
+                        putString(getString(R.string.active_secret_seed), account.secretSeed)
                         apply()
                     }
 

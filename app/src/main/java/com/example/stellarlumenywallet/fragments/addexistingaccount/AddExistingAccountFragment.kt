@@ -34,7 +34,7 @@ class AddExistingAccountFragment: Fragment() {
             //val secretSeed = binding.secretSeedInputLayout.editText?.text.toString()
             val accountId = "GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE"
             val stellarAccount = StellarApi.getAccount(accountId)
-            val secretSeed = stellarAccount.keyPair.secretSeed.toString()
+            val secretSeed = StellarApi.secretSeedToString(stellarAccount.keyPair.secretSeed)
             val publicKey = stellarAccount.keyPair.publicKey.toString()
 
             val account = Account(accountId, publicKey, secretSeed, "")

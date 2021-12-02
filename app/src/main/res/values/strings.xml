@@ -2,6 +2,8 @@
     <string name="app_name">Stellar Lumeny Wallet</string>
 
     <string name="active_account_id" translatable="false">activeAccountId</string>
+    <string name="active_secret_seed" translatable="false">activeSecretSeed</string>
+
     <string name="fragment_wallet">WALLET</string>
     <string name="fragment_send">SEND</string>
     <string name="fragment_contacts">CONTACTS</string>

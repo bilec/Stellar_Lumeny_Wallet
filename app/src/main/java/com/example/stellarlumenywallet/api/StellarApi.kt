@@ -1,6 +1,5 @@
 package com.example.stellarlumenywallet.api
 
-import com.example.stellarlumenywallet.db.dao.AccountDao
 import com.example.stellarlumenywallet.db.entities.Transaction as DbTransaction
 import org.stellar.sdk.*
 import org.stellar.sdk.responses.AccountResponse
@@ -63,7 +62,7 @@ object StellarApi {
         throw Exception("AssetTypeNative not exist.")
     }
 
-    suspend fun send(accountId: String, toAccountId: String, amount: String, note: String): SubmitTransactionResponse {
+    suspend fun send(secretSeed: String, accountId: String, toAccountId: String, amount: String, note: String): SubmitTransactionResponse {
         val account = getAccount(accountId)
         val fromAccount = server.accounts().account(account.accountId)
 
@@ -74,7 +73,7 @@ object StellarApi {
             .setBaseFee(Transaction.MIN_BASE_FEE)
             .build()
 
-        transaction.sign(account.keyPair)
+        transaction.sign(KeyPair.fromSecretSeed(secretSeed))
         return server.submitTransaction(transaction)
     }
 
