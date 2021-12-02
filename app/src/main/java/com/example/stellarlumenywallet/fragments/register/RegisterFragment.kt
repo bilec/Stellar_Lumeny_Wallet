@@ -51,7 +51,7 @@ class RegisterFragment: Fragment() {
         binding.secretSeedLayout.editText?.setText(secretSeed)
 
         binding.buttonSave.setOnClickListener {
-            val account = Account(accountId, publicKey, secretSeed)
+            val account = Account(accountId, publicKey, secretSeed, "")
 
             runBlocking(Dispatchers.IO) { launch { viewModel.insertAccount(account) } }
             it.findNavController().navigate(R.id.action_registerFragment_to_accountManagementFragment)

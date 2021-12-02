@@ -37,7 +37,7 @@ class AddExistingAccountFragment: Fragment() {
             val secretSeed = stellarAccount.keyPair.secretSeed.toString()
             val publicKey = stellarAccount.keyPair.publicKey.toString()
 
-            val account = Account(accountId, publicKey, secretSeed)
+            val account = Account(accountId, publicKey, secretSeed, "")
 
             runBlocking(Dispatchers.IO) { launch { viewModel.insertAccount(account) } }
             it.findNavController().navigate(R.id.action_addExistingAccountFragment_to_accountManagementFragment)

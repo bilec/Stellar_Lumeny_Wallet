@@ -8,5 +8,6 @@ import androidx.room.PrimaryKey
 data class Account(
     @PrimaryKey @ColumnInfo(name = "account_id") val accountId: String,
     @ColumnInfo(name = "public_key") val publicKey: String,
-    @ColumnInfo(name = "secret_seed") val secretSeed: String
+    @ColumnInfo(name = "secret_seed") val secretSeed: String,
+    val balance: String,
 )

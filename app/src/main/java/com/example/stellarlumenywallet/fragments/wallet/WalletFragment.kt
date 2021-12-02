@@ -2,19 +2,15 @@ package com.example.stellarlumenywallet.fragments.wallet
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.stellarlumenywallet.R
-import com.example.stellarlumenywallet.adapters.balances.BalancesAdapter
 import com.example.stellarlumenywallet.api.StellarApi
 import com.example.stellarlumenywallet.databinding.FragmentWalletBinding
 import com.example.stellarlumenywallet.db.WalletRoomDatabase
 import com.example.stellarlumenywallet.db.repositories.AccountRepository
-import com.example.stellarlumenywallet.db.repositories.BalanceRepository
 import com.example.stellarlumenywallet.db.repositories.TransactionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -31,12 +27,8 @@ class WalletFragment: Fragment() {
         val database by lazy { WalletRoomDatabase.getDatabase(requireContext()) }
         val transactionRepository by lazy { TransactionRepository(database.transactionDao()) }
         val accountRepository by lazy { AccountRepository(database.accountDao()) }
-        val balanceRepository by lazy { BalanceRepository(database.balanceDao()) }
-        val viewModelFactory = WalletViewModelFactory(transactionRepository, accountRepository, balanceRepository)
+        val viewModelFactory = WalletViewModelFactory(transactionRepository, accountRepository)
         viewModel = ViewModelProvider(this, viewModelFactory)[WalletViewModel::class.java]
-
-        val adapter = BalancesAdapter()
-        binding.recyclerView.adapter = adapter
 
         viewModel.allTransactions.observe(this) {
             val newTransactions = it.takeLast(3)
@@ -69,8 +61,6 @@ class WalletFragment: Fragment() {
                 val balances = viewModel.allAccountsWithBalances.value?.first { it.account.accountId == activeAccountId }?.balances
                 if (balances != null) {
                     withContext(Dispatchers.Main) {
-                        adapter.balances = balances
-                        adapter.notifyDataSetChanged()
                     }
                 }
             }
@@ -83,15 +73,14 @@ class WalletFragment: Fragment() {
 
                 if (activeAccountId == "") {
                     withContext(Dispatchers.Main) { binding.swipeRefreshLayout.isRefreshing = false }
+                    return@launch
                 }
 
                 val balances = StellarApi.getBalances("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
                 val transactions = StellarApi.getTransactions("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
 
-                viewModel.deleteBalances()
                 viewModel.deleteTransaction()
 
-                viewModel.insertBalances(balances)
                 viewModel.insertTransactions(transactions)
 
                 withContext(Dispatchers.Main) {

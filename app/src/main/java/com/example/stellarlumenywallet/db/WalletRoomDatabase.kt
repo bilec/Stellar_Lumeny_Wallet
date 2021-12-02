@@ -5,18 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.stellarlumenywallet.db.dao.AccountDao
-import com.example.stellarlumenywallet.db.dao.BalanceDao
 import com.example.stellarlumenywallet.db.dao.ContactDao
 import com.example.stellarlumenywallet.db.dao.TransactionDao
 import com.example.stellarlumenywallet.db.entities.*
 
-@Database(entities = [Account::class, Balance::class, Contact::class, Transaction::class], version = 1, exportSchema = false)
+@Database(entities = [Account::class, Contact::class, Transaction::class], version = 1, exportSchema = false)
 abstract class WalletRoomDatabase: RoomDatabase() {
 
     abstract fun accountDao(): AccountDao
     abstract fun contactDao(): ContactDao
     abstract fun transactionDao(): TransactionDao
-    abstract fun balanceDao(): BalanceDao
 
     companion object {
         @Volatile
