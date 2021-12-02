@@ -17,6 +17,7 @@ import com.example.stellarlumenywallet.db.WalletRoomDatabase
 import com.example.stellarlumenywallet.db.repositories.AccountRepository
 import com.example.stellarlumenywallet.db.repositories.TransactionRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -37,19 +38,21 @@ class AccountManagementFragment: Fragment() {
         binding.autoCompleteView.setAdapter(adapter)
 
         binding.autoCompleteView.setOnItemClickListener { adapterView, view, i, l ->
-            runBlocking(Dispatchers.IO) { launch {
-                    val account = viewModel.allAccounts.value?.get(i)
-                    if (account != null) {
-                        val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
-                        with(sharedPreferences.edit()) {
-                            putString(getString(R.string.active_account_id), account.accountId)
-                            apply()
-                        }
-
-                        viewModel.deleteAllTransactions()
-                        val transactions = StellarApi.getTransactions(account.accountId)
-                        viewModel.insertTransactions(transactions)
+            GlobalScope.launch(Dispatchers.IO) {
+                val account = viewModel.allAccounts.value?.get(i)
+                if (account != null) {
+                    val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+                    with(sharedPreferences.edit()) {
+                        putString(getString(R.string.active_account_id), account.accountId)
+                        apply()
                     }
+
+                    viewModel.deleteAllTransactions()
+                    val transactions = StellarApi.getTransactions(account.accountId)
+                    viewModel.insertTransactions(transactions)
+
+                    val balance = StellarApi.getBalance(account.accountId)
+                    viewModel.updateAccount(account.copy(balance = balance))
                 }
             }
         }

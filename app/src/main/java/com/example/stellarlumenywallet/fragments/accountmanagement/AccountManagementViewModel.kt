@@ -2,6 +2,7 @@ package com.example.stellarlumenywallet.fragments.accountmanagement
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.example.stellarlumenywallet.db.entities.Account
 import com.example.stellarlumenywallet.db.entities.Transaction
 import com.example.stellarlumenywallet.db.repositories.AccountRepository
 import com.example.stellarlumenywallet.db.repositories.TransactionRepository
@@ -14,4 +15,6 @@ class AccountManagementViewModel(
 
     suspend fun insertTransactions(transactions: List<Transaction>) = transactions.forEach { transactionRepository.insert(it) }
     suspend fun deleteAllTransactions() = transactionRepository.deleteAll()
+
+    suspend fun updateAccount(account: Account) = accountRepository.update(account)
 }
