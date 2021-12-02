@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -63,6 +64,8 @@ class WalletFragment: Fragment() {
             val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
 
             GlobalScope.launch(Dispatchers.IO) {
+                if (activeAccountId == "") return@launch
+
                 val balances = viewModel.allAccountsWithBalances.value?.first { it.account.accountId == activeAccountId }?.balances
                 if (balances != null) {
                     withContext(Dispatchers.Main) {
@@ -77,6 +80,10 @@ class WalletFragment: Fragment() {
             GlobalScope.launch(Dispatchers.IO) {
                 val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
                 val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
+
+                if (activeAccountId == "") {
+                    withContext(Dispatchers.Main) { binding.swipeRefreshLayout.isRefreshing = false }
+                }
 
                 val balances = StellarApi.getBalances("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
                 val transactions = StellarApi.getTransactions("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
