@@ -63,17 +63,18 @@ object StellarApi {
         throw Exception("AssetTypeNative not exist.")
     }
 
-    suspend fun send(fromAccountKeyPair: KeyPair, toAccountId: String, asset: Asset = AssetTypeNative(), amount: String, note: String): SubmitTransactionResponse {
-        val fromAccount = server.accounts().account(fromAccountKeyPair.accountId)
+    suspend fun send(accountId: String, toAccountId: String, amount: String, note: String): SubmitTransactionResponse {
+        val account = getAccount(accountId)
+        val fromAccount = server.accounts().account(account.accountId)
 
         val transaction = Transaction.Builder(fromAccount, Network.TESTNET)
-            .addOperation(PaymentOperation.Builder(toAccountId, asset, amount).build())
+            .addOperation(PaymentOperation.Builder(toAccountId, AssetTypeNative(), amount).build())
             .setTimeout(180)
             .addMemo(Memo.text(note))
             .setBaseFee(Transaction.MIN_BASE_FEE)
             .build()
 
-        transaction.sign(fromAccountKeyPair)
+        transaction.sign(account.keyPair)
         return server.submitTransaction(transaction)
     }
 

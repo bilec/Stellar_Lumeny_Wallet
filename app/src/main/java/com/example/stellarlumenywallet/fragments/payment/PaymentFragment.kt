@@ -1,5 +1,6 @@
 package com.example.stellarlumenywallet.fragments.payment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +10,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.stellarlumenywallet.R
+import com.example.stellarlumenywallet.api.StellarApi
 import com.example.stellarlumenywallet.databinding.FragmentPaymentBinding
 import com.example.stellarlumenywallet.db.WalletRoomDatabase
 import com.example.stellarlumenywallet.db.repositories.AccountRepository
 import com.example.stellarlumenywallet.db.repositories.ContactRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 class PaymentFragment: Fragment() {
     private lateinit var binding: FragmentPaymentBinding
@@ -44,11 +43,18 @@ class PaymentFragment: Fragment() {
         }
 
         binding.buttonConfirm.setOnClickListener {
-            val amount = binding.amountInputLayout.editText?.text.toString()
-            val note = binding.noteInputLayout.editText?.text.toString()
+            GlobalScope.launch(Dispatchers.IO) {
+                val recipient = "binding from dropdown"
+                val amount = binding.amountInputLayout.editText?.text.toString()
+                val note = binding.noteInputLayout.editText?.text.toString()
+                val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+                val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
 
-            binding.amountInputLayout.editText?.setText("")
-            binding.noteInputLayout.editText?.setText("")
+                binding.amountInputLayout.editText?.setText("")
+                binding.noteInputLayout.editText?.setText("")
+
+                val response = StellarApi.send(activeAccountId, recipient, amount, note)
+            }
         }
 
         viewModel.contacts.observe(this) { contacts ->
