@@ -1,7 +1,6 @@
 package com.example.stellarlumenywallet.api
 
 import com.example.stellarlumenywallet.db.entities.Transaction as DbTransaction
-import com.example.stellarlumenywallet.db.entities.Balance
 import org.stellar.sdk.*
 import org.stellar.sdk.responses.AccountResponse
 import org.stellar.sdk.responses.SubmitTransactionResponse
@@ -32,23 +31,6 @@ object StellarApi {
 
     suspend fun openAccount(keyPair: KeyPair) {
         val response: InputStream = URL("$friendBotUrl/?addr=${keyPair.accountId}").openStream()
-    }
-
-    suspend fun getBalances(accountId: String): List<Balance> {
-        val account = getAccount(accountId)
-        val balances = mutableListOf<Balance>()
-
-        account.balances.forEach {
-            val balance = Balance(
-                assetType = it.assetType,
-                balance = it.balance,
-                accountID = accountId
-            )
-
-            balances.add(balance)
-        }
-
-        return balances
     }
 
     fun getTransactions(accountId: String): List<DbTransaction> {

@@ -51,21 +51,6 @@ class WalletFragment: Fragment() {
             }
         }
 
-        viewModel.allAccountsWithBalances.observe(this) {
-            val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
-            val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
-
-            GlobalScope.launch(Dispatchers.IO) {
-                if (activeAccountId == "") return@launch
-
-                val balances = viewModel.allAccountsWithBalances.value?.first { it.account.accountId == activeAccountId }?.balances
-                if (balances != null) {
-                    withContext(Dispatchers.Main) {
-                    }
-                }
-            }
-        }
-
         binding.swipeRefreshLayout.setOnRefreshListener {
             GlobalScope.launch(Dispatchers.IO) {
                 val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
@@ -76,7 +61,6 @@ class WalletFragment: Fragment() {
                     return@launch
                 }
 
-                val balances = StellarApi.getBalances("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
                 val transactions = StellarApi.getTransactions("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
 
                 viewModel.deleteTransaction()

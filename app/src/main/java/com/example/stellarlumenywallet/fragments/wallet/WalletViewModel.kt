@@ -11,7 +11,6 @@ class WalletViewModel(
     private val accountRepository: AccountRepository
 ): ViewModel() {
     val allTransactions = transactionRepository.allTransactions.asLiveData()
-    val allAccountsWithBalances = accountRepository.allAccountsWithBalances.asLiveData()
 
     suspend fun insertTransactions(transactions: List<Transaction>) = transactions.forEach { transactionRepository.insert(it) }
 
