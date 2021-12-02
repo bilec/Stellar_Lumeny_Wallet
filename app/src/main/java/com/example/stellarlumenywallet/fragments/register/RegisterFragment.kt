@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import android.util.Base64
 import org.stellar.sdk.Server
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -38,9 +39,9 @@ class RegisterFragment: Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[RegisterViewModel::class.java]
 
         val keyPair = StellarApi.createKeyPair()
-        val secretSeed = keyPair.secretSeed.toString()
-        val publicKey = keyPair.publicKey.toString()
-        val accountId = keyPair.accountId.toString()
+        val secretSeed = StellarApi.secretSeedToString(keyPair.secretSeed)
+        val publicKey = Base64.encodeToString(keyPair.publicKey, 0)
+        val accountId = keyPair.accountId
 
         GlobalScope.launch(Dispatchers.IO) {
             StellarApi.openAccount(keyPair)
