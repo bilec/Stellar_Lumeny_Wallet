@@ -1,5 +1,9 @@
 package com.example.stellarlumenywallet.api
 
+import android.util.Base64
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import com.example.stellarlumenywallet.db.entities.Transaction as DbTransaction
 import org.stellar.sdk.*
 import org.stellar.sdk.responses.AccountResponse
@@ -62,18 +66,19 @@ object StellarApi {
         throw Exception("AssetTypeNative not exist.")
     }
 
-    suspend fun send(secretSeed: String, accountId: String, toAccountId: String, amount: String, note: String): SubmitTransactionResponse {
-        val account = getAccount(accountId)
-        val fromAccount = server.accounts().account(account.accountId)
+    suspend fun send(secretSeed: String, toAccountId: String, amount: String, note: String): SubmitTransactionResponse {
+        val source: KeyPair = KeyPair.fromSecretSeed(secretSeed)
+        val destination = KeyPair.fromAccountId(toAccountId)
+        val sourceAccount = server.accounts().account(source.accountId)
 
-        val transaction = Transaction.Builder(fromAccount, Network.TESTNET)
-            .addOperation(PaymentOperation.Builder(toAccountId, AssetTypeNative(), amount).build())
+        val transaction = Transaction.Builder(sourceAccount, Network.TESTNET)
+            .addOperation(PaymentOperation.Builder(destination.accountId, AssetTypeNative(), amount).build())
             .setTimeout(180)
             .addMemo(Memo.text(note))
             .setBaseFee(Transaction.MIN_BASE_FEE)
             .build()
 
-        transaction.sign(KeyPair.fromSecretSeed(secretSeed))
+        transaction.sign(source)
         return server.submitTransaction(transaction)
     }
 
