@@ -28,7 +28,10 @@ class WalletFragment: Fragment() {
         val transactionRepository by lazy { TransactionRepository(database.transactionDao()) }
         val accountRepository by lazy { AccountRepository(database.accountDao()) }
         val viewModelFactory = WalletViewModelFactory(transactionRepository, accountRepository)
+        val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
         viewModel = ViewModelProvider(this, viewModelFactory)[WalletViewModel::class.java]
+        binding.balance.text = StellarApi.getBalance(activeAccountId).balance
 
         viewModel.allTransactions.observe(this) {
             val newTransactions = it.takeLast(3)
@@ -53,8 +56,7 @@ class WalletFragment: Fragment() {
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             GlobalScope.launch(Dispatchers.IO) {
-                val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
-                val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
+                binding.balance.text = StellarApi.getBalance(activeAccountId).balance
 
                 if (activeAccountId == "") {
                     withContext(Dispatchers.Main) { binding.swipeRefreshLayout.isRefreshing = false }

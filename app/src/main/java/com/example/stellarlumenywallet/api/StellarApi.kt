@@ -1,5 +1,6 @@
 package com.example.stellarlumenywallet.api
 
+import com.example.stellarlumenywallet.db.dao.AccountDao
 import com.example.stellarlumenywallet.db.entities.Transaction as DbTransaction
 import org.stellar.sdk.*
 import org.stellar.sdk.responses.AccountResponse
@@ -51,6 +52,15 @@ object StellarApi {
         }
 
         return transactions
+    }
+
+    fun getBalance(accountId: String): AccountResponse.Balance{
+        getAccount(accountId).getBalances().forEach {
+            if (it.assetType == AssetTypeNative().toString()){
+                return it
+            }
+        }
+        throw Exception("AssetTypeNative not exist.")
     }
 
     suspend fun send(fromAccountKeyPair: KeyPair, toAccountId: String, asset: Asset = AssetTypeNative(), amount: String, note: String): SubmitTransactionResponse {
