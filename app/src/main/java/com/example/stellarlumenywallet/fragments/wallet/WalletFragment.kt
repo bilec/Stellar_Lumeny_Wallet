@@ -30,47 +30,50 @@ class WalletFragment: Fragment() {
         val viewModelFactory = WalletViewModelFactory(transactionRepository, accountRepository)
         val sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val activeAccountId = sharedPreferences.getString(getString(R.string.active_account_id), "") ?: ""
-        viewModel = ViewModelProvider(this, viewModelFactory)[WalletViewModel::class.java]
-        binding.balance.text = StellarApi.getBalance(activeAccountId).balance
 
-        viewModel.allTransactions.observe(this) {
-            val newTransactions = it.takeLast(3)
-            when (newTransactions.size) {
-                1 -> {
-                    binding.firstTransaction.text = newTransactions[0].toString()
-                    binding.secondTransaction.visibility = View.GONE
-                    binding.thirdTransaction.visibility = View.GONE
-                }
-                2 -> {
-                    binding.firstTransaction.text = newTransactions[0].toString()
-                    binding.secondTransaction.text = newTransactions[1].toString()
-                    binding.thirdTransaction.visibility = View.GONE
-                }
-                3 -> {
-                    binding.firstTransaction.text = newTransactions[0].toString()
-                    binding.secondTransaction.text = newTransactions[1].toString()
-                    binding.thirdTransaction.text = newTransactions[2].toString()
+        if (activeAccountId != "") {
+            viewModel = ViewModelProvider(this, viewModelFactory)[WalletViewModel::class.java]
+            binding.balance.text = StellarApi.getBalance(activeAccountId).balance
+
+            viewModel.allTransactions.observe(this) {
+                val newTransactions = it.takeLast(3)
+                when (newTransactions.size) {
+                    1 -> {
+                        binding.firstTransaction.text = newTransactions[0].toString()
+                        binding.secondTransaction.visibility = View.GONE
+                        binding.thirdTransaction.visibility = View.GONE
+                    }
+                    2 -> {
+                        binding.firstTransaction.text = newTransactions[0].toString()
+                        binding.secondTransaction.text = newTransactions[1].toString()
+                        binding.thirdTransaction.visibility = View.GONE
+                    }
+                    3 -> {
+                        binding.firstTransaction.text = newTransactions[0].toString()
+                        binding.secondTransaction.text = newTransactions[1].toString()
+                        binding.thirdTransaction.text = newTransactions[2].toString()
+                    }
                 }
             }
-        }
 
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            GlobalScope.launch(Dispatchers.IO) {
-                binding.balance.text = StellarApi.getBalance(activeAccountId).balance
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                GlobalScope.launch(Dispatchers.IO) {
+                    binding.balance.text = StellarApi.getBalance(activeAccountId).balance
 
-                if (activeAccountId == "") {
-                    withContext(Dispatchers.Main) { binding.swipeRefreshLayout.isRefreshing = false }
-                    return@launch
-                }
+                    if (activeAccountId == "") {
+                        withContext(Dispatchers.Main) { binding.swipeRefreshLayout.isRefreshing = false }
+                        return@launch
+                    }
 
-                val transactions = StellarApi.getTransactions("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
+                    val transactions = StellarApi.getTransactions("GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE")
 
-                viewModel.deleteTransaction()
+                    viewModel.deleteTransaction()
 
-                viewModel.insertTransactions(transactions)
+                    viewModel.insertTransactions(transactions)
 
-                withContext(Dispatchers.Main) {
-                    binding.swipeRefreshLayout.isRefreshing = false
+                    withContext(Dispatchers.Main) {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                    }
                 }
             }
         }
