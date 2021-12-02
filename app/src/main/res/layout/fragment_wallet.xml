@@ -71,7 +71,7 @@
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:fontFamily="@font/roboto_condensed_bold"
-                android:text="500"
+                android:text="---"
                 android:textAlignment="center"
                 android:textColor="@color/green"
                 android:textSize="32sp"
