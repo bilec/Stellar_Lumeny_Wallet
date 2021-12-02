@@ -13,4 +13,15 @@ data class Transaction(
     val from: String? = null,
     val amount: String? = null,
     @ColumnInfo(name = "asset_type") val assetType: String? = null
-)
+
+
+
+) {
+    override fun toString(): String {
+        return if (from == null) {
+            String.format("Initial transaction \t 10000.0000000")
+        } else {
+            String.format("%s \t %s", from, amount)
+        }
+    }
+}
