@@ -31,8 +31,7 @@ class AddExistingAccountFragment: Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[AddExistingAccountViewModel::class.java]
 
         binding.buttonSave.setOnClickListener {
-            //val secretSeed = binding.secretSeedInputLayout.editText?.text.toString()
-            val accountId = "GBW6TMLL3QMR4CDPW6RVVHPBLNUYWKMLBRKQEQU2CHWXAE7CFGFDKMBE"
+            val accountId = binding.secretSeedInputLayout.editText?.text.toString()
             val stellarAccount = StellarApi.getAccount(accountId)
             val secretSeed = StellarApi.secretSeedToString(stellarAccount.keyPair.secretSeed)
             val publicKey = stellarAccount.keyPair.publicKey.toString()

@@ -30,8 +30,8 @@ class NewContactFragment: Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[NewContactViewModel::class.java]
 
         binding.buttonSave.setOnClickListener {
-            val name = binding.accountIdInputLayout.editText?.text.toString()
-            val accountId = binding.nameInputLayout.editText?.text.toString()
+            val name = binding.nameInputLayout.editText?.text.toString()
+            val accountId = binding.accountIdInputLayout.editText?.text.toString()
             val contact = Contact(name = name, accountId = accountId)
 
             runBlocking(Dispatchers.IO) { launch { viewModel.insertContact(contact) } }
